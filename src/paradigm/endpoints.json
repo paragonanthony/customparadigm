@@ -1,0 +1,546 @@
+[
+  {
+    "name": "ActivityCrud",
+    "path": "ActivityCrud/GetActivities/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "AttachmentsAndLinks",
+    "path": "AttachmentsAndLinks",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "Attribute",
+    "path": "Attribute",
+    "paging": "none",
+    "query": []
+  },
+  {
+    "name": "AttributeType",
+    "path": "AttributeType",
+    "paging": "none",
+    "query": []
+  },
+  {
+    "name": "BuildExport",
+    "path": "BuildExport",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "BuildProduction",
+    "path": "BuildProduction",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CategoryPricing",
+    "path": "CategoryPricing",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CategorySubPricing",
+    "path": "CategorySubPricing",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CreditCard",
+    "path": "CreditCard",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CreditCardDetail",
+    "path": "CreditCardDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "Customer",
+    "path": "Customer/{skip}/{take}",
+    "paging": "skipTake",
+    "query": [
+      "properties"
+    ]
+  },
+  {
+    "name": "CustomerContact",
+    "path": "CustomerContact",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size",
+      "properties"
+    ]
+  },
+  {
+    "name": "CustomerContactLog",
+    "path": "CustomerContactLog",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CustomerContactMethod",
+    "path": "CustomerContactMethod",
+    "paging": "none",
+    "query": []
+  },
+  {
+    "name": "CustomerContactView",
+    "path": "CustomerContactView",
+    "paging": "none",
+    "query": []
+  },
+  {
+    "name": "CustomerPayment",
+    "path": "CustomerPayment",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CustomerPaymentDetail",
+    "path": "CustomerPaymentDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CustomerPrePayment",
+    "path": "CustomerPrePayment",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CustomerPrePaymentDetail",
+    "path": "CustomerPrePaymentDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "CustomerShipTo",
+    "path": "CustomerShipTo/Get/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "EmployeeData",
+    "path": "EmployeeData/{pageNumber}/{size}",
+    "paging": "page",
+    "query": []
+  },
+  {
+    "name": "InventoryAdjustment",
+    "path": "InventoryAdjustment",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryAdjustmentDetail",
+    "path": "InventoryAdjustmentDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryAlternative",
+    "path": "InventoryAlternative/Get",
+    "paging": "none",
+    "query": []
+  },
+  {
+    "name": "InventoryAssembly",
+    "path": "InventoryAssembly",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryAttribute",
+    "path": "InventoryAttribute",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryBuild",
+    "path": "InventoryBuild",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryBuildDetail",
+    "path": "InventoryBuildDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryByShelf",
+    "path": "InventoryByShelf",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryByWarehouse",
+    "path": "InventoryByWarehouse/Get",
+    "paging": "none",
+    "query": []
+  },
+  {
+    "name": "InventoryCustomOption",
+    "path": "InventoryCustomOption",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryLot",
+    "path": "InventoryLot",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryLotUsage",
+    "path": "InventoryLotUsage",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryModel",
+    "path": "InventoryModel",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "InventoryOptionSet",
+    "path": "InventoryOptionSet",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "Items",
+    "path": "Items/GetItems/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "ItemUnitOfMeasure",
+    "path": "ItemUnitOfMeasure/GetItems/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "Job",
+    "path": "Job",
+    "paging": "none",
+    "query": [
+      "pageNumber",
+      "pageSize"
+    ]
+  },
+  {
+    "name": "JobContactLog",
+    "path": "JobContactLog",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "JobContactMethod",
+    "path": "JobContactMethod",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "JobPhase",
+    "path": "JobPhase",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "JobPhaseClassEdit",
+    "path": "JobPhaseClassEdit",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "JobPhaseClassification",
+    "path": "JobPhaseClassification",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "JobSalesTax",
+    "path": "JobSalesTax",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "JobShipTo",
+    "path": "JobShipTo",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "Opportunity",
+    "path": "Opportunity",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size",
+      "properties"
+    ]
+  },
+  {
+    "name": "OpportunityAttribute",
+    "path": "OpportunityAttribute",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "OpportunityCategory",
+    "path": "OpportunityCategory",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "OpportunityStage",
+    "path": "OpportunityStage",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "ParadigmTrip",
+    "path": "ParadigmTrip/GetTrips/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "PurchaseInvoice",
+    "path": "PurchaseInvoice/GetPurchaseInvoice/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "PurchaseInvoiceDetail",
+    "path": "PurchaseInvoiceDetail/GetInvoiceDetail/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "PurchaseOrder",
+    "path": "PurchaseOrder/GetPurchase/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "PurchaseOrderDetail",
+    "path": "PurchaseOrderDetail/GetPurchaseDetail/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "Quote",
+    "path": "Quote",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "QuoteAttribute",
+    "path": "QuoteAttribute/Get/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "QuoteDetail",
+    "path": "QuoteDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "SalesOrder",
+    "path": "SalesOrder/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "SalesOrderAttribute",
+    "path": "SalesOrderAttribute/Get/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "SalesOrderDetail",
+    "path": "SalesOrderDetail/Get/{skip}/{take}",
+    "paging": "skipTake",
+    "query": []
+  },
+  {
+    "name": "Transfer",
+    "path": "Transfer",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "TransferDetail",
+    "path": "TransferDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "TripDetail",
+    "path": "TripDetail",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "TripDetailItems",
+    "path": "TripDetailItems",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "VendorContactLog",
+    "path": "VendorContactLog",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "WarehouseShelf",
+    "path": "WarehouseShelf",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  },
+  {
+    "name": "Webhook",
+    "path": "Webhook",
+    "paging": "page",
+    "query": [
+      "pageNumber",
+      "size"
+    ]
+  }
+]

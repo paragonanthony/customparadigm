@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invoice Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <header>
+    <h1>Invoice Dashboard</h1>
+    <nav><a href="dashboard.html" aria-current="page">Dashboard</a><a href="index.html">Explorer</a></nav>
+  </header>
+  <main class="viz-root">
+    <form id="range" class="filters">
+      <label>Start date <input type="date" name="start" required></label>
+      <label>End date <input type="date" name="end" required></label>
+      <div class="presets" role="group" aria-label="Quick ranges">
+        <button type="button" data-preset="month">This month</button>
+        <button type="button" data-preset="quarter">This quarter</button>
+        <button type="button" data-preset="ytd">Year to date</button>
+        <button type="button" data-preset="last12">Last 12 months</button>
+      </div>
+      <button type="submit" class="primary">Run</button>
+    </form>
+    <p id="status" role="status"></p>
+
+    <section class="kpis" aria-label="Summary">
+      <div class="kpi hero"><span class="kpi-label">Total invoiced</span><span class="kpi-value" id="kpi-amount">–</span></div>
+      <div class="kpi"><span class="kpi-label">Invoices</span><span class="kpi-value" id="kpi-invoices">–</span></div>
+      <div class="kpi"><span class="kpi-label">Customers</span><span class="kpi-value" id="kpi-customers">–</span></div>
+      <div class="kpi"><span class="kpi-label">Average invoice</span><span class="kpi-value" id="kpi-average">–</span></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 id="chart-title">Top 10 customers by invoiced total</h2>
+        <div class="segmented" role="radiogroup" aria-label="Rank by">
+          <label><input type="radio" name="mode" value="customers" checked> By customer</label>
+          <label><input type="radio" name="mode" value="invoices"> By invoice</label>
+        </div>
+      </div>
+      <div id="chart" class="bars" aria-describedby="chart-title"></div>
+      <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+    </section>
+
+    <section class="card">
+      <h2>Details</h2>
+      <div class="table-wrap"><table id="table"></table></div>
+    </section>
+  </main>
+  <script src="dashboard.js"></script>
+</body>
+</html>
