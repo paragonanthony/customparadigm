@@ -99,18 +99,26 @@ app.get('/api/accounts', async (_req, res, next) => {
   }
 });
 
-app.get('/api/employees', async (req, res, next) => {
-  // One search word, matched against ID, first and last name (Paradigm's Contains ignores case).
-  const term = /[A-Za-z0-9.-]+/.exec(req.query.search ?? '')?.[0];
-  const filter = term
-    ? ['StrEmployeeID', 'StrFirstName', 'StrLastName'].map((f) => `${f} Contains ${term}`).join(' or ')
-    : undefined;
+// All employees, with just the columns the list page shows. Paradigm can't sort,
+// so the page filters, sorts and pages this list itself.
+const MAX_EMPLOYEES = 5000;
+app.get('/api/employees', async (_req, res, next) => {
   try {
-    res.json(await paradigm.list('EmployeeData/{pageNumber}/{size}', {
-      pageNumber: int(req.query.page, 1, 1, Number.MAX_SAFE_INTEGER),
-      size: int(req.query.size, 25, 1, 200),
-      filter,
-    }));
+    const items = [];
+    for await (const e of paradigm.listAll('EmployeeData/{pageNumber}/{size}', { pageSize: 200 })) {
+      items.push({
+        strEmployeeID: e.strEmployeeID,
+        strFirstName: e.strFirstName,
+        strMiddleName: e.strMiddleName,
+        strLastName: e.strLastName,
+        strDepartment: e.strDepartment,
+        strSendToEmail: e.strSendToEmail,
+        ysnSalesman: e.ysnSalesman,
+        dtmTerminated: e.dtmTerminated,
+      });
+      if (items.length >= MAX_EMPLOYEES) break;
+    }
+    res.json({ items, truncated: items.length >= MAX_EMPLOYEES });
   } catch (err) {
     next(err);
   }

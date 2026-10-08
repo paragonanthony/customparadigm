@@ -72,7 +72,14 @@ The end date includes the whole day. Customer IDs in `EXCLUDED_CUSTOMERS` (`src/
 
 ## Employees
 
-`/employees.html` lists employees from `GET /api/EmployeeData/{pageNumber}/{size}`. Search matches ID, first or last name. **Edit** opens `/employee.html?id={strEmployeeID}`.
+`/employees.html` lists employees. The server loads them all from `GET /api/EmployeeData/{pageNumber}/{size}` (up to 5,000), because Paradigm can't sort. The page then filters, sorts and pages them itself.
+
+- Only **active** employees (no `dtmTerminated`) are shown by default. Tick **Show all** to include terminated ones.
+- Click any column header to sort by it, and click again to reverse.
+- Search matches ID, name, department or email as you type.
+- The search, Show all and sort settings are kept in the URL.
+
+**Edit** opens `/employee.html?id={strEmployeeID}`.
 
 Saving sends only the fields you changed to `PUT /api/employees/:id`. The server then:
 1. Loads the current record, and refuses with 409 if `dtmLastModified` no longer matches what the page loaded (someone else saved in the meantime).
