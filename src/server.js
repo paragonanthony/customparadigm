@@ -6,6 +6,7 @@ import { ParadigmClient, ParadigmError } from './paradigm/client.js';
 import endpoints from './paradigm/endpoints.json' with { type: 'json' };
 import { invoiceSql, summarise } from './dashboard.js';
 import { SECTIONS, buildUpdate, isEmployeeId } from './employees.js';
+import { getAccounts } from './accounts.js';
 
 const PORT = Number(process.env.PORT) || 3000;
 const APP_PASSWORD = process.env.APP_PASSWORD;
@@ -90,6 +91,14 @@ app.get('/api/dashboard/invoices', async (req, res, next) => {
 // Employees: list, detail, and update via /api/EmployeeData.
 app.get('/api/employees/fields', (_req, res) => res.json(SECTIONS));
 
+app.get('/api/accounts', async (_req, res, next) => {
+  try {
+    res.json(await getAccounts(paradigm));
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.get('/api/employees', async (req, res, next) => {
   // One search word, matched against ID, first and last name (Paradigm's Contains ignores case).
   const term = /[A-Za-z0-9.-]+/.exec(req.query.search ?? '')?.[0];
@@ -130,6 +139,10 @@ app.put('/api/employees/:id', express.json({ limit: '100kb' }), async (req, res,
     let body;
     try {
       body = buildUpdate(current, req.body?.changes);
+      const expense = req.body?.changes?.strExpenseID;
+      if (expense && !(await getAccounts(paradigm)).some((a) => a.id === body.strExpenseID)) {
+        throw new RangeError(`Expense account ${body.strExpenseID} doesn't exist`);
+      }
     } catch (err) {
       if (err instanceof RangeError) return res.status(400).json({ error: err.message });
       throw err;
@@ -151,4 +164,8 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, () => console.log(`customparadigm listening on http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`customparadigm listening on http://localhost:${PORT}`);
+  // Warm the slow account list so the first employee edit page doesn't wait on it.
+  getAccounts(paradigm).catch((err) => console.error('Could not preload accounts:', err.message));
+});

@@ -47,7 +47,7 @@ export const SECTIONS = [
       { name: 'strClockId', label: 'Clock ID', type: 'text' },
       { name: 'strClockCard', label: 'Clock card', type: 'text' },
       { name: 'strADUserName', label: 'AD user name', type: 'text' },
-      { name: 'strExpenseID', label: 'Expense ID', type: 'text' },
+      { name: 'strExpenseID', label: 'Expense account', type: 'select', options: 'accounts', wide: true },
     ],
   },
   {
@@ -90,7 +90,7 @@ function coerce(field, value) {
       if (!DATE_RE.test(value) || Number.isNaN(Date.parse(value))) throw new RangeError(`${field.label} must be a valid date`);
       return `${value}T00:00:00`;
     }
-    default: {
+    default: { // text, email, textarea, select
       if (typeof value !== 'string') throw new RangeError(`${field.label} must be text`);
       const v = value.trim();
       return v === '' ? null : v;

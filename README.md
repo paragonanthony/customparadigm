@@ -79,7 +79,7 @@ Saving sends only the fields you changed to `PUT /api/employees/:id`. The server
 2. Applies only the editable fields defined in `SECTIONS` in `src/employees.js`, and validates their types. First name is required.
 3. Sends the full record to `PUT /api/EmployeeData/{id}?excludeNullValues=false`, so cleared fields are cleared and fields the form doesn't show (such as `strEditLock`) are kept.
 
-To add or remove fields on the form, edit `SECTIONS`.
+To add or remove fields on the form, edit `SECTIONS`. **Expense account** is a dropdown of GL accounts from `GET /api/Account/GetAll`, excluding header accounts. The list is cached for 10 minutes (`src/accounts.js`) and loaded at startup, because the call is slow. The server rejects account IDs that aren't in the list.
 
 ## Paradigm API notes
 

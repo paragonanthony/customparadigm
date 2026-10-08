@@ -10,6 +10,34 @@ const dirtyEl = document.getElementById('dirty');
 
 let fields = [];      // flat list of field definitions
 let record = null;    // last record loaded from / saved to Paradigm
+const optionSets = {}; // dropdown name -> { placeholder, groups: [[groupLabel, [{ value, label }]]] }
+
+// Accounts load separately (the list is slow the first time) and fill the dropdown when ready.
+async function loadAccounts() {
+  const selects = fields.filter((f) => f.options === 'accounts').map((f) => form.elements[f.name]);
+  if (!selects.length) return;
+  try {
+    const res = await fetch('/api/accounts');
+    const accounts = await res.json();
+    if (!res.ok) throw new Error(accounts.error);
+    const groups = new Map();
+    for (const a of accounts) {
+      if (!groups.has(a.type)) groups.set(a.type, []);
+      groups.get(a.type).push({ value: a.id, label: a.description ? `${a.id} — ${a.description}` : a.id });
+    }
+    for (const s of selects) {
+      optionSets[s.name] = { placeholder: '— None —', groups: [...groups] };
+      setOptions(s, s.value);
+      s.disabled = false;
+    }
+  } catch (err) {
+    for (const s of selects) {
+      optionSets[s.name] = { placeholder: 'Accounts unavailable', groups: [] };
+      setOptions(s, s.value);
+    }
+    setStatus(`Couldn't load the account list: ${err.message}`, 'error');
+  }
+}
 
 function setStatus(text, kind = '') {
   statusEl.className = kind;
@@ -49,6 +77,7 @@ function buildForm(sections) {
       const wrap = el('label', { className: `field${f.wide ? ' wide' : ''}${f.type === 'bool' ? ' check' : ''}` });
       let input;
       if (f.type === 'textarea') input = el('textarea', { name: f.name, rows: 3 });
+      else if (f.type === 'select') input = el('select', { name: f.name, disabled: true });
       else if (f.type === 'bool') input = el('input', { type: 'checkbox', name: f.name });
       else if (f.type === 'number') input = el('input', { type: 'number', name: f.name, step: 'any' });
       else input = el('input', { type: f.type === 'email' ? 'email' : f.type === 'date' ? 'date' : 'text', name: f.name });
@@ -62,12 +91,30 @@ function buildForm(sections) {
   }
 }
 
+// Rebuilds a dropdown's options, keeping `value` selectable even if it isn't in the list.
+function setOptions(select, value) {
+  const { placeholder, groups } = optionSets[select.name] ?? { placeholder: 'Loading…', groups: [] };
+  select.replaceChildren(el('option', { value: '' }, placeholder));
+  const known = new Set();
+  for (const [label, items] of groups) {
+    const og = el('optgroup', { label });
+    for (const o of items) {
+      og.append(el('option', { value: o.value }, o.label));
+      known.add(o.value);
+    }
+    select.append(og);
+  }
+  if (value && !known.has(value)) select.append(el('option', { value }, `${value} (not in account list)`));
+  select.value = value;
+}
+
 function fill(rec) {
   record = rec;
   for (const f of fields) {
     const input = form.elements[f.name];
     const v = toControl(f, rec[f.name]);
     if (f.type === 'bool') input.checked = v;
+    else if (f.type === 'select') setOptions(input, v);
     else input.value = v;
   }
   titleEl.textContent = fullName(rec) || rec.strEmployeeID;
@@ -148,6 +195,7 @@ window.addEventListener('beforeunload', (e) => {
     buildForm(sections);
     fill(rec);
     form.hidden = false;
+    loadAccounts();
   } catch (err) {
     titleEl.textContent = 'Employee';
     setStatus(err.message, 'error');
