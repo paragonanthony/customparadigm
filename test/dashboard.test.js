@@ -6,7 +6,7 @@ import { ParadigmClient } from '../src/paradigm/client.js';
 test('invoiceSql builds the query with an inclusive end day', () => {
   assert.equal(
     invoiceSql('2026-01-01', '2026-03-31'),
-    "select strcustomerid, curtotal from tblarinvoice where dtmdate between '20260101' and '20260331 23:59:59.997'",
+    "select strcustomerid, curordertotal from tblarinvoice where dtmdate between '20260101' and '20260331 23:59:59.997'",
   );
 });
 
@@ -20,11 +20,11 @@ test('invoiceSql rejects anything that is not a real date', () => {
 
 test('summarise totals, groups by customer and ranks the top 10', () => {
   const rows = [
-    { StrCustomerId: 'A ', CurTotal: 100 },
-    { strcustomerid: 'B', curtotal: '250.5' },
-    { strcustomerid: 'A', curtotal: 200 },
-    { strcustomerid: null, curtotal: 5 },
-    ...Array.from({ length: 12 }, (_, i) => ({ strcustomerid: `C${i}`, curtotal: i })),
+    { StrCustomerId: 'A ', CurOrderTotal: 100 },
+    { strcustomerid: 'B', curordertotal: '250.5' },
+    { strcustomerid: 'A', curordertotal: 200 },
+    { strcustomerid: null, curordertotal: 5 },
+    ...Array.from({ length: 12 }, (_, i) => ({ strcustomerid: `C${i}`, curordertotal: i })),
   ];
   const s = summarise(rows);
   assert.equal(s.totals.invoices, 16);
@@ -42,10 +42,10 @@ test('report posts the SQL as a JSON string and parses a string result', async (
     baseUrl: 'https://h', apiKey: 'k',
     fetchImpl: async (url, init) => {
       calls.push({ url: String(url), init });
-      return Response.json(JSON.stringify([{ strcustomerid: 'A', curtotal: 1 }]));
+      return Response.json(JSON.stringify([{ strcustomerid: 'A', curordertotal: 1 }]));
     },
   });
-  assert.deepEqual(await pd.report('select 1'), [{ strcustomerid: 'A', curtotal: 1 }]);
+  assert.deepEqual(await pd.report('select 1'), [{ strcustomerid: 'A', curordertotal: 1 }]);
   assert.equal(calls[0].url, 'https://h/api/Report');
   assert.equal(calls[0].init.method, 'POST');
   assert.equal(calls[0].init.body, '"select 1"');

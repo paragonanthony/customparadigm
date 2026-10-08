@@ -17,7 +17,7 @@ export function invoiceSql(start, end) {
   if (!s || !e) throw new RangeError('Dates must be valid YYYY-MM-DD values');
   if (s > e) throw new RangeError('Start date must be on or before end date');
   // The end bound includes the whole end day, in case dtmdate carries a time.
-  return `select strcustomerid, curtotal from tblarinvoice where dtmdate between '${s}' and '${e} 23:59:59.997'`;
+  return `select strcustomerid, curordertotal from tblarinvoice where dtmdate between '${s}' and '${e} 23:59:59.997'`;
 }
 
 // Column casing in the report output isn't guaranteed, so look keys up case-insensitively.
@@ -29,7 +29,7 @@ function field(row, name) {
 export function summarise(rows, top = 10) {
   const invoices = (Array.isArray(rows) ? rows : []).map((r) => ({
     customerId: String(field(r, 'strcustomerid') ?? '').trim() || '(none)',
-    total: Number(field(r, 'curtotal')) || 0,
+    total: Number(field(r, 'curordertotal')) || 0,
   }));
 
   const byCustomer = new Map();
