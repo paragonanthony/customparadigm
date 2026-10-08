@@ -35,8 +35,8 @@ const FIELD_RE = /^[A-Za-z_][A-Za-z0-9_.]*$/;
 /**
  * Turn a list of conditions into a Paradigm filter string.
  * Each condition is [field, op] for unary ops or [field, op, value].
- * An array value (for In, NotIn, Between) is joined with commas.
- * TODO: confirm the multi-value separator in the Swagger docs.
+ * An array value (for In, NotIn) is joined with commas, which Paradigm accepts.
+ * Values may contain spaces as-is or in double quotes; single quotes don't match.
  */
 export function buildFilter(conditions) {
   return conditions.map(([field, op, value]) => {

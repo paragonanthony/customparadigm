@@ -79,12 +79,13 @@ The end date includes the whole day. Customer IDs in `EXCLUDED_CUSTOMERS` (`src/
 - Most entities also have `POST`, `PUT`, `DELETE`, `batch-create`, and `batch-update` routes. Use `pd.post/put/delete`.
 - Filtering: `?filter=Field Op Value and Field2 Op2 ...`. Operators: Equals, NotEquals, Between, In, NotIn, GreaterThan, LessThan, GreatherThanOrEqualTo (Paradigm's spelling), LessThanOrEqualTo, StartsWith, EndsWith, Contains, Like, IsNull, IsNotNull, IsNullOrEmptyString, IsNotNullOrEmptyString, IsNullOr0, IsNotNullOr0.
 
-### Still to verify against a live key
+### Verified against the dev API
 
-- The separator for multi-value `In` / `NotIn` / `Between` values (currently comma-joined)
-- How values containing spaces are written in filters
-- Whether `pageNumber` is 1-based (assumed 1)
-- The format of `properties` (assumed comma-separated)
+- `POST /api/Report` returns the rows as a JSON-encoded string, which `pd.report()` parses. **Columns that are NULL are left out of each row.** Bad SQL comes back as 400 with the SQL Server message in `detail`.
+- Filters: values with spaces work as-is (`StrCompanyName Contains Cash Customer`) or in double quotes, but not in single quotes. `In` takes a comma-separated list (`StrCustomerId In CASH,STR001`). An unknown field gives 400 `Invalid filter field`.
+- `pageNumber` starts at 1. Page 0 makes Paradigm return 500.
+- `properties` takes a comma-separated list of fields and isn't case-sensitive. With it, the response keys use database casing (`StrCustomerID`) instead of the usual camelCase (`strCustomerId`).
+- `.env`: the API key must be quoted if it contains `#`, which otherwise starts a comment.
 
 ## Deploying (Railway)
 

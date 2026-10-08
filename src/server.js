@@ -56,7 +56,7 @@ app.get('/api/list', async (req, res, next) => {
       paging: endpoint.paging,
       skip: int(req.query.skip, 0, 0, Number.MAX_SAFE_INTEGER),
       take: int(req.query.take, 100, 1, 500),
-      pageNumber: int(req.query.pageNumber, 1, 0, Number.MAX_SAFE_INTEGER),
+      pageNumber: int(req.query.pageNumber, 1, 1, Number.MAX_SAFE_INTEGER), // 1-based; 0 makes Paradigm return 500
       size: int(req.query.size, 100, 1, 500),
       filter: req.query.filter || undefined,
       properties: endpoint.query.includes('properties') ? req.query.properties || undefined : undefined,
