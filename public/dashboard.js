@@ -63,9 +63,11 @@ function renderKpis(t) {
 function items() {
   if (!data) return [];
   return mode() === 'customers'
-    ? data.topCustomers.map((c) => ({ label: c.customerId, total: c.total, invoices: c.invoices }))
-    : data.topInvoices.map((i) => ({ label: i.customerId, total: i.total }));
+    ? data.topCustomers.map((c) => ({ id: c.customerId, name: c.customerName, total: c.total, invoices: c.invoices }))
+    : data.topInvoices.map((i) => ({ id: i.customerId, name: i.customerName, total: i.total }));
 }
+
+const labelOf = (d) => d.name || d.id;
 
 function renderChart() {
   const list = items();
@@ -80,9 +82,9 @@ function renderChart() {
   }
   const max = Math.max(...list.map((d) => d.total), 0) || 1;
   list.forEach((d, i) => {
-    const label = el('div', { className: 'bar-label', title: d.label }, d.label);
+    const label = el('div', { className: 'bar-label', title: d.name ? `${d.name} (${d.id})` : d.id }, labelOf(d));
     const track = el('div', { className: 'bar-track', tabIndex: 0 });
-    track.setAttribute('aria-label', `${i + 1}. ${d.label}: ${money.format(d.total)}`);
+    track.setAttribute('aria-label', `${i + 1}. ${labelOf(d)} (${d.id}): ${money.format(d.total)}`);
     const bar = el('div', { className: 'bar' });
     bar.style.width = `${Math.max(0, d.total / max) * 85}%`;
     track.append(bar);
@@ -99,7 +101,8 @@ function renderChart() {
 
 function showTooltip(track, d, i) {
   tooltip.replaceChildren(
-    el('strong', {}, `${i + 1}. ${d.label}`),
+    el('strong', {}, `${i + 1}. ${labelOf(d)}`),
+    el('span', {}, d.id), el('br'),
     el('span', {}, money.format(d.total)),
   );
   if (d.invoices !== undefined) {
@@ -121,8 +124,8 @@ function renderTable() {
   const list = items();
   const byCustomer = mode() === 'customers';
   const cols = byCustomer
-    ? [['#', 'num'], ['Customer'], ['Invoices', 'num'], ['Total', 'num'], ['Share', 'num']]
-    : [['#', 'num'], ['Customer'], ['Invoice total', 'num'], ['Share', 'num']];
+    ? [['#', 'num'], ['Customer ID'], ['Customer name'], ['Invoices', 'num'], ['Total', 'num'], ['Share', 'num']]
+    : [['#', 'num'], ['Customer ID'], ['Customer name'], ['Invoice total', 'num'], ['Share', 'num']];
   table.replaceChildren();
   const head = table.createTHead().insertRow();
   cols.forEach(([name, cls]) => head.append(el('th', { className: cls ?? '' }, name)));
@@ -131,8 +134,8 @@ function renderTable() {
     const tr = body.insertRow();
     const share = pct.format(d.total / (data.totals.amount || 1));
     const cells = byCustomer
-      ? [[i + 1, 'num'], [d.label], [count.format(d.invoices), 'num'], [money.format(d.total), 'num'], [share, 'num']]
-      : [[i + 1, 'num'], [d.label], [money.format(d.total), 'num'], [share, 'num']];
+      ? [[i + 1, 'num'], [d.id], [d.name], [count.format(d.invoices), 'num'], [money.format(d.total), 'num'], [share, 'num']]
+      : [[i + 1, 'num'], [d.id], [d.name], [money.format(d.total), 'num'], [share, 'num']];
     cells.forEach(([v, cls]) => tr.append(el('td', { className: cls ?? '' }, String(v))));
   });
 }

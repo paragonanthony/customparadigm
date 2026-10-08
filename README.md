@@ -61,10 +61,12 @@ Request/response schemas: Swagger UI at `https://{host}/swagger`, spec at `/swag
 `/dashboard.html` calls `GET /api/dashboard/invoices?start=YYYY-MM-DD&end=YYYY-MM-DD`. The server checks both dates and sends this SQL to Paradigm's `POST /api/Report` (`pd.report(sql)`):
 
 ```sql
-select strcustomerid, curordertotal from tblarinvoice where dtmdate between '{start}' and '{end} 23:59:59.997'
+select strcustomerid, strbilltocompany, curordertotal from tblarinvoice
+where dtmdate between '{start}' and '{end} 23:59:59.997'
+  and isnull(strcustomerid, '') not in ('CENBUS001')
 ```
 
-The end date includes the whole day. Rows are totalled in Node: KPIs (total, invoice count, customers, average), plus the top 10 customers by summed total and the top 10 individual invoices. The browser never sends SQL.
+The end date includes the whole day. Customer IDs in `EXCLUDED_CUSTOMERS` (`src/dashboard.js`) are left out. The customer name is the invoice's bill-to company. Rows are totalled in Node: KPIs (total, invoice count, customers, average), plus the top 10 customers by summed total and the top 10 individual invoices. The browser never sends SQL.
 
 ## Paradigm API notes
 
