@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Employee</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="employees.css">
+</head>
+<body>
+  <header>
+    <h1>Employees</h1>
+    <nav><a href="dashboard.html">Dashboard</a><a href="employees.html" aria-current="page">Employees</a><a href="index.html">Explorer</a></nav>
+  </header>
+  <main class="page">
+    <p><a href="employees.html" id="back">← Back to employees</a></p>
+    <div class="detail-head">
+      <h2 id="title">Loading…</h2>
+      <dl id="meta" class="meta"></dl>
+    </div>
+    <p id="status" role="status"></p>
+    <form id="edit" hidden novalidate>
+      <div id="sections"></div>
+      <div class="form-actions">
+        <button type="submit" id="save" disabled>Save changes</button>
+        <button type="button" id="reset" class="secondary" disabled>Discard changes</button>
+        <span id="dirty" class="muted"></span>
+      </div>
+    </form>
+  </main>
+  <script src="employee.js"></script>
+</body>
+</html>

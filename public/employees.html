@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Employees</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="employees.css">
+</head>
+<body>
+  <header>
+    <h1>Employees</h1>
+    <nav><a href="dashboard.html">Dashboard</a><a href="employees.html" aria-current="page">Employees</a><a href="index.html">Explorer</a></nav>
+  </header>
+  <main class="page">
+    <form id="search" class="toolbar" role="search">
+      <label class="wide">Search <input type="search" name="search" placeholder="ID, first or last name"></label>
+      <button type="submit">Search</button>
+    </form>
+    <p id="status" role="status"></p>
+    <div class="table-wrap">
+      <table id="list">
+        <thead>
+          <tr><th>Employee ID</th><th>Name</th><th>Department</th><th>Email</th><th>Salesman</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <nav class="pager" aria-label="Pages">
+      <button type="button" id="prev">Previous</button>
+      <span id="page-info"></span>
+      <button type="button" id="next">Next</button>
+    </nav>
+  </main>
+  <script src="employees.js"></script>
+</body>
+</html>

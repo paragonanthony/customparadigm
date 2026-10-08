@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { ParadigmClient, ParadigmError } from './paradigm/client.js';
 import endpoints from './paradigm/endpoints.json' with { type: 'json' };
 import { invoiceSql, summarise } from './dashboard.js';
+import { SECTIONS, buildUpdate, isEmployeeId } from './employees.js';
 
 const PORT = Number(process.env.PORT) || 3000;
 const APP_PASSWORD = process.env.APP_PASSWORD;
@@ -81,6 +82,61 @@ app.get('/api/dashboard/invoices', async (req, res, next) => {
       return res.status(502).json({ error: 'Unexpected response from the Paradigm report endpoint' });
     }
     res.json({ start: req.query.start, end: req.query.end, ...summarise(rows) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Employees: list, detail, and update via /api/EmployeeData.
+app.get('/api/employees/fields', (_req, res) => res.json(SECTIONS));
+
+app.get('/api/employees', async (req, res, next) => {
+  // One search word, matched against ID, first and last name (Paradigm's Contains ignores case).
+  const term = /[A-Za-z0-9.-]+/.exec(req.query.search ?? '')?.[0];
+  const filter = term
+    ? ['StrEmployeeID', 'StrFirstName', 'StrLastName'].map((f) => `${f} Contains ${term}`).join(' or ')
+    : undefined;
+  try {
+    res.json(await paradigm.list('EmployeeData/{pageNumber}/{size}', {
+      pageNumber: int(req.query.page, 1, 1, Number.MAX_SAFE_INTEGER),
+      size: int(req.query.size, 25, 1, 200),
+      filter,
+    }));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/employees/:id', async (req, res, next) => {
+  if (!isEmployeeId(req.params.id)) return res.status(400).json({ error: 'Invalid employee ID' });
+  try {
+    res.json(await paradigm.get(`EmployeeData/${encodeURIComponent(req.params.id)}`));
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Body: { changes: { field: value, ... }, lastModified }. lastModified is the
+// dtmLastModified the page loaded; if the record has changed since, the save is refused.
+app.put('/api/employees/:id', express.json({ limit: '100kb' }), async (req, res, next) => {
+  const { id } = req.params;
+  if (!isEmployeeId(id)) return res.status(400).json({ error: 'Invalid employee ID' });
+  const path = `EmployeeData/${encodeURIComponent(id)}`;
+  try {
+    const current = await paradigm.get(path);
+    if (req.body?.lastModified !== undefined && req.body.lastModified !== current.dtmLastModified) {
+      return res.status(409).json({ error: 'This employee was changed by someone else after you opened it. Reload to see the latest version.' });
+    }
+    let body;
+    try {
+      body = buildUpdate(current, req.body?.changes);
+    } catch (err) {
+      if (err instanceof RangeError) return res.status(400).json({ error: err.message });
+      throw err;
+    }
+    const updated = await paradigm.request('PUT', path, { body, query: { excludeNullValues: 'false' } });
+    console.log(`Employee ${id} updated: ${Object.keys(req.body.changes ?? {}).join(', ')}`);
+    res.json(updated);
   } catch (err) {
     next(err);
   }

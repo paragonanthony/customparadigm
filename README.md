@@ -12,6 +12,8 @@ Custom tooling on top of the [Paradigm ERP](https://www.paradigmerp.com/) REST A
 | `src/server.js` | Express server: `/healthz` and a read-only `GET /api/list?path=…` passthrough, allowlisted to the endpoint catalog, protected by basic auth |
 | `public/dashboard.html` | **Invoice Dashboard**: pick a date range; shows KPIs and the top 10 customers or invoices from `tblarinvoice` |
 | `src/dashboard.js` | Builds the dashboard's SQL from validated dates and summarises the rows |
+| `public/employees.html`, `employee.html` | **Employees**: searchable list with Edit links, and a detail page for editing a record |
+| `src/employees.js` | Editable employee fields and the save logic |
 | `public/index.html` | "Paradigm Explorer", a small page for running list queries in the browser |
 | `src/cli.js` | `npm run query` for exploring from the terminal |
 
@@ -67,6 +69,17 @@ where dtmdate between '{start}' and '{end} 23:59:59.997'
 ```
 
 The end date includes the whole day. Customer IDs in `EXCLUDED_CUSTOMERS` (`src/dashboard.js`) are left out. The customer name is the invoice's bill-to company. Rows are totalled in Node: KPIs (total, invoice count, customers, average), plus the top 10 customers by summed total and the top 10 individual invoices. The browser never sends SQL.
+
+## Employees
+
+`/employees.html` lists employees from `GET /api/EmployeeData/{pageNumber}/{size}`. Search matches ID, first or last name. **Edit** opens `/employee.html?id={strEmployeeID}`.
+
+Saving sends only the fields you changed to `PUT /api/employees/:id`. The server then:
+1. Loads the current record, and refuses with 409 if `dtmLastModified` no longer matches what the page loaded (someone else saved in the meantime).
+2. Applies only the editable fields defined in `SECTIONS` in `src/employees.js`, and validates their types. First name is required.
+3. Sends the full record to `PUT /api/EmployeeData/{id}?excludeNullValues=false`, so cleared fields are cleared and fields the form doesn't show (such as `strEditLock`) are kept.
+
+To add or remove fields on the form, edit `SECTIONS`.
 
 ## Paradigm API notes
 
